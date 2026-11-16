@@ -1,0 +1,17 @@
+{
+  "name": "Control de Jornada Laboral",
+  "short_name": "Reloj Jornada",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
+  "description": "Calculador y monitor de fin de jornada laboral reglamentaria",
+  "icons": [
+    {
+      "src": "icono.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

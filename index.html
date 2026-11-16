@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1120">
+    <meta name="description" content="Calculador, monitor e historial semanal de fin de jornada laboral">
+    <title>Control de Jornada Laboral</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icono.svg">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <header class="encabezado-aplicacion">
+            <h1 class="titulo-principal">Control de Jornada</h1>
+            <p class="subtitulo">Registro de horario y cálculo de fin de jornada laboral</p>
+        </header>
+
+        <main class="tarjeta-panel">
+            <section class="seccion-configuracion">
+                <div class="grupo-selector-central">
+                    <div class="fila-etiqueta-accion">
+                        <label class="etiqueta-campo">Hora de ingreso</label>
+                        <button type="button" id="botonHoraActual" class="boton-secundario-pequeno">Usar hora actual</button>
+                    </div>
+
+                    <div class="caja-selector-traslucida">
+                        <div class="marcador-seleccion-central"></div>
+                        <div class="grupo-columnas-tiempo">
+                            <div class="columna-desplazamiento" id="columnaHoras" tabindex="0"></div>
+                            <div class="separador-dos-puntos">:</div>
+                            <div class="columna-desplazamiento" id="columnaMinutos" tabindex="0"></div>
+                            <div class="columna-desplazamiento columna-periodo" id="columnaPeriodo" tabindex="0"></div>
+                        </div>
+                    </div>
+
+                    <div class="fila-escritura-manual">
+                        <span class="etiqueta-manual-auxiliar">O escribir directamente:</span>
+                        <div class="grupo-entradas-manuales">
+                            <input type="number" id="entradaTextoHora" class="control-entrada-manual" min="1" max="12" placeholder="08" aria-label="Hora manual">
+                            <span class="separador-manual">:</span>
+                            <input type="number" id="entradaTextoMinuto" class="control-entrada-manual" min="0" max="59" placeholder="30" aria-label="Minuto manual">
+                            <select id="entradaTextoPeriodo" class="control-select-manual" aria-label="Periodo manual">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fila-minutos-extras-compacta">
+                    <div class="bloque-informacion-extras">
+                        <label class="etiqueta-campo">Minutos adicionales de comida</label>
+                        <span class="texto-ayuda">Se adicionan automáticamente a las 9h 15m reglamentarias.</span>
+                    </div>
+
+                    <div class="bloque-controles-extras-mixto">
+                        <div class="grupo-extras-manual">
+                            <label for="entradaTextoMinutosExtras" class="etiqueta-manual-micro">Manual:</label>
+                            <div class="caja-input-unidad">
+                                <input type="number" id="entradaTextoMinutosExtras" class="control-entrada-manual control-manual-extras" min="0" max="300" value="0">
+                                <span class="unidad-minutos">min</span>
+                            </div>
+                        </div>
+
+                        <div class="caja-selector-traslucida caja-selector-extras-compacta">
+                            <div class="marcador-seleccion-central marcador-extras"></div>
+                            <div class="columna-desplazamiento columna-extras" id="columnaMinutosExtras" tabindex="0"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bloque-captura-entrada">
+                    <button type="button" id="botonCapturarEntrada" class="boton-capturar-primario">Capturar hora de entrada</button>
+                    <div id="indicadorEntradaCapturada" class="tarjeta-estado-captura oculto">
+                        <span class="etiqueta-estado-captura">Entrada capturada para hoy:</span>
+                        <strong id="textoHoraEntradaCapturada" class="valor-estado-captura">--:-- --</strong>
+                    </div>
+                </div>
+
+                <div class="fila-control-adicional">
+                    <button type="button" id="botonReiniciar" class="boton-peligro-borde">Restablecer valores</button>
+                </div>
+            </section>
+
+            <section id="panelResultados" class="seccion-resultados">
+                <div class="cuadricula-metricas">
+                    <div class="tarjeta-metrica">
+                        <span class="titulo-metrica">Hora de salida estimada</span>
+                        <span id="indicadorHoraSalida" class="valor-metrica destacado">--:-- --</span>
+                    </div>
+                    <div class="tarjeta-metrica">
+                        <span class="titulo-metrica">Tiempo restante</span>
+                        <span id="indicadorTiempoRestante" class="valor-metrica">--:--:--</span>
+                    </div>
+                    <div class="tarjeta-metrica">
+                        <span class="titulo-metrica">Tiempo transcurrido</span>
+                        <span id="indicadorTiempoTranscurrido" class="valor-metrica">--:--:--</span>
+                    </div>
+                    <div class="tarjeta-metrica">
+                        <span class="titulo-metrica">Duracion total programada</span>
+                        <span id="indicadorDuracionTotal" class="valor-metrica">9h 15m</span>
+                    </div>
+                </div>
+
+                <div class="contenedor-progreso">
+                    <div class="fila-etiquetas-progreso">
+                        <span id="etiquetaEstado">En progreso</span>
+                        <span id="etiquetaPorcentaje">0%</span>
+                    </div>
+                    <div class="pista-progreso amplia">
+                        <div id="barraProgreso" class="barra-relleno-progreso"></div>
+                    </div>
+                </div>
+
+                <div class="fila-accion-salida">
+                    <button type="button" id="botonConfirmarSalidaAhora" class="boton-exito-accion">Confirmar y registrar salida ahora</button>
+                </div>
+            </section>
+        </main>
+
+        <section class="tarjeta-panel seccion-historial">
+            <header class="cabecera-seccion-historial">
+                <div>
+                    <h2 class="subtitulo-seccion">Historial Semanal de Jornadas</h2>
+                    <p class="texto-ayuda">Registros agrupados por semana con opción para editar hora de salida.</p>
+                </div>
+            </header>
+
+            <div id="contenedorSemanasHistorial" class="contenedor-lista-semanas">
+                <div class="mensaje-historial-vacio">No hay registros capturados en el historial.</div>
+            </div>
+        </section>
+    </div>
+
+    <div id="modalAlertaFin" class="fondo-modal oculto" role="dialog" aria-modal="true" aria-labelledby="tituloModalAlerta">
+        <div class="caja-modal">
+            <div class="cabecera-modal">
+                <h2 id="tituloModalAlerta" class="titulo-modal">Jornada laboral cumplida</h2>
+                <button type="button" id="botonCerrarCruzModal" class="boton-cerrar-modal" aria-label="Cerrar alerta">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="cuerpo-modal">
+                <p class="mensaje-modal">Se ha alcanzado la hora de termino de tu jornada reglamentaria.</p>
+                <div class="resumen-final-modal">
+                    <div class="elemento-resumen">
+                        <span class="etiqueta-resumen">Hora de salida calculada:</span>
+                        <strong id="modalHoraSalidaTexto">--:-- --</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="pie-modal">
+                <button type="button" id="botonPosponerCincoMinutos" class="boton-secundario">Posponer 5 minutos</button>
+                <button type="button" id="botonAceptarModal" class="boton-primario">Confirmar salida y finalizar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalEditarSalida" class="fondo-modal oculto" role="dialog" aria-modal="true" aria-labelledby="tituloModalEdicion">
+        <div class="caja-modal">
+            <div class="cabecera-modal">
+                <h2 id="tituloModalEdicion" class="titulo-modal">Editar hora de salida</h2>
+                <button type="button" id="botonCerrarCruzEdicion" class="boton-cerrar-modal" aria-label="Cerrar edición">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="cuerpo-modal">
+                <p id="subtituloFechaEdicion" class="mensaje-modal">Modifica la hora de salida para el día seleccionado:</p>
+                <div class="fila-controles-edicion-tiempo">
+                    <div class="campo-edicion-grupo">
+                        <label for="campoEditarHora" class="etiqueta-campo-pequena">Hora (1-12)</label>
+                        <select id="campoEditarHora" class="control-seleccion-edicion"></select>
+                    </div>
+                    <div class="campo-edicion-grupo">
+                        <label for="campoEditarMinuto" class="etiqueta-campo-pequena">Minutos</label>
+                        <select id="campoEditarMinuto" class="control-seleccion-edicion"></select>
+                    </div>
+                    <div class="campo-edicion-grupo">
+                        <label for="campoEditarPeriodo" class="etiqueta-campo-pequena">Periodo</label>
+                        <select id="campoEditarPeriodo" class="control-seleccion-edicion">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="pie-modal">
+                <button type="button" id="botonCancelarEdicion" class="boton-secundario">Cancelar</button>
+                <button type="button" id="botonGuardarEdicionSalida" class="boton-primario">Guardar cambio</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="aplicacion.js"></script>
+</body>
+</html>
