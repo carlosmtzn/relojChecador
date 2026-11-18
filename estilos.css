@@ -977,7 +977,6 @@ body {
     overflow: hidden;
   }
 
-  /* Ambas columnas internas toman el 50% del espacio disponible */
   .seccion-configuracion,
   .seccion-resultados {
     flex: 1; 
@@ -986,6 +985,7 @@ body {
     height: 100%;
     overflow-y: auto; 
     padding-right: 15px; 
+    padding-bottom: 25px;
   }
 
  
@@ -994,13 +994,12 @@ body {
     grid-template-columns: 1fr 1fr; 
     gap: 15px;
   }
-
-  /* Empujamos el botón de salida al fondo de la sección de resultados */
+              
   .fila-accion-salida {
     margin-top: auto;
+    margin-bottom: 20px;
   }
 
-  /* Historial como panel lateral completo */
   .seccion-historial {
     height: 100%;
     display: flex;
@@ -1011,7 +1010,7 @@ body {
 
   #contenedorSemanasHistorial {
     flex: 1;
-    overflow-y: auto; /* Solo el interior del historial hace scroll */
+    overflow-y: auto; 
     padding-right: 10px;
   }
 
