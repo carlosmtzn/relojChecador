@@ -943,3 +943,87 @@ body {
         flex-direction: column;
     }
 }
+
+@media (min-width: 1024px) {
+
+  body, html {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .contenedor-principal {
+    display: grid;
+    grid-template-columns: 1fr 380px; 
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    height: 100vh;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .encabezado-aplicacion {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  main.tarjeta-panel {
+    display: flex;
+    flex-direction: row; 
+    gap: 40px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Ambas columnas internas toman el 50% del espacio disponible */
+  .seccion-configuracion,
+  .seccion-resultados {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; 
+    padding-right: 15px; 
+  }
+
+ 
+  .cuadricula-metricas {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px;
+  }
+
+  /* Empujamos el botón de salida al fondo de la sección de resultados */
+  .fila-accion-salida {
+    margin-top: auto;
+  }
+
+  /* Historial como panel lateral completo */
+  .seccion-historial {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0; 
+  }
+
+  #contenedorSemanasHistorial {
+    flex: 1;
+    overflow-y: auto; /* Solo el interior del historial hace scroll */
+    padding-right: 10px;
+  }
+
+  .seccion-configuracion::-webkit-scrollbar,
+  .seccion-resultados::-webkit-scrollbar,
+  #contenedorSemanasHistorial::-webkit-scrollbar {
+    width: 6px;
+  }
+  .seccion-configuracion::-webkit-scrollbar-thumb,
+  .seccion-resultados::-webkit-scrollbar-thumb,
+  #contenedorSemanasHistorial::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+  }
+}
