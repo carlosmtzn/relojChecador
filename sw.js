@@ -1,4 +1,4 @@
-const NOMBRE_CACHE = "reloj-jornada-v9";
+const NOMBRE_CACHE = "reloj-jornada-v10";
 const ARCHIVOS_A_CACHEAR = [
     "./",
     "./index.html",
